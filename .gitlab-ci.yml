@@ -1,11 +1,20 @@
+test:
+  stage: test
+  script:
+  - pip install -U sphinx
+  - sphinx-build -b html . public
+  only:
+  - branches
+  except:
+  - main
+
 pages:
   stage: deploy
   script:
-    - cp -r docs/_build/html/ public/
+  - pip install -U sphinx
+  - sphinx-build -b html . public
   artifacts:
     paths:
     - public
   only:
   - main
-  tags:
-  - shared
