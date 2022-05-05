@@ -1,0 +1,51 @@
+##########################################################
+# Main executable for running an emulator interactively. #
+#                                                        #
+# Author: Jacob Davison                                  #
+# Date:   05/05/2022                                     #
+##########################################################
+
+import sys
+import argparse
+import pprint
+import numpy as np
+
+import dmd_rkoi as drk
+import dmd_std as dst
+from utils.get_log_data import get_log_data
+from utils.make_argparser import make_argparser
+
+args = make_argparser()
+
+print("Args from command line:")
+pprint.pprint(args)
+print()
+
+dmd = None
+
+if args['emu_method'] == 'standard':
+
+    print("Reading single flow data from ", args['dataPath'])
+    data_matrix = get_log_data(args['dataPath'])
+
+    print("Fitting standard DMD emulator")
+    dmd = dst.DMD_STD()
+    dmd.fit(data_matrix, args['nobs'], r=args['trunc'], enforce_physics=True)
+
+elif args['emu_method'] == 'parametric':
+
+    if args['emuType'] == 'rKOI':
+
+        print("Fitting rKOI DMD emulator")
+        dmd = drk.DMD_rKOI()
+        #dmd.fit(data_list, params, 100, 6)
+        #dmd.interp_dmd(0.5)
+print("Printing results...")
+
+s_range = np.arange(args['t0'], args['t1']+args['dt'], args['dt'])
+pred = dmd.predict(s_range, args['dt'])
+
+print("{:<10s} | {:<10s}".format("s", "E"))
+print("-----------------------")
+for i,s in enumerate(s_range):
+    print("{:10.7f} | {:10.7f}".format(s, pred[0,i]))
