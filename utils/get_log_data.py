@@ -1,3 +1,10 @@
+###############################################################
+# Get log data from the C++ IMSRG code for the pairing model. #
+#                                                             #
+# Author: Jacob Davison                                       #
+# Date:   05/05/2022                                          #
+###############################################################
+
 import numpy as np
 
 def get_log_data(data_path):
@@ -9,8 +16,6 @@ def get_log_data(data_path):
 
         lines_trunc = lines[7:]
         lines_trunc = lines_trunc[:-1]
-
-        print(len(lines), len(lines_trunc))
 
         data_matrix = np.array([np.array(line.split(','))[0:-1] for line in lines_trunc], dtype=np.float64).T
 

@@ -1,3 +1,10 @@
+##############################################
+# Implementation of the standard DMD method. #
+#                                            #
+# Author: Jacob Davison                      #
+# Date:   05/05/2022                         #
+##############################################
+
 import scipy.linalg as la
 import numpy as np
 
@@ -88,8 +95,8 @@ class DMD_STD(object):
         b = la.lstsq(phi, H0, lapack_driver='gelsd')[0]
 
         if enforce_physics:
-            # idx_max = np.argmax(w)
-            # w[idx_max] = 1
+            idx_max = np.argmax(w)
+            w[idx_max] = 1
             
             # drop imaginary comps
             w = np.real(w) 

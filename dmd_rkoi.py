@@ -1,3 +1,11 @@
+#######################################################################
+# Implemenation of the reduced Koopman Operator Interpolation method  #
+# for parametric DMD.                                                 #
+#                                                                     #
+# Author: Jacob Davison                                               #
+# Date:   05/05/2022                                                  #
+#######################################################################
+
 import numpy as np
 import scipy.linalg as la
 import scipy.interpolate
