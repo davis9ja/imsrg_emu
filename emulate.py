@@ -26,13 +26,20 @@ dmd = None
 if args['emu_method'] == 'standard':
 
     print("Reading single flow data from ", args['dataPath'])
-    data_matrix = get_log_data(args['dataPath'])
+    #data_matrix = get_log_data(args['dataPath'])
+    data_matrix = np.loadtxt(args['dataPath'], delimiter=',').T
 
     print("Fitting standard DMD emulator")
     dmd = dst.DMD_STD()
     dmd.fit(data_matrix, args['nobs'], r=args['trunc'], enforce_physics=True)
 
 elif args['emu_method'] == 'parametric':
+
+    data_list = []
+    with open(args['dataPath'], 'r') as f:
+        for line in f:
+            data_matrix = np.loadtxt(args['dataPath'], delimiter=',').T
+            data_list.append(data_matrix)
 
     if args['emuType'] == 'rKOI':
 

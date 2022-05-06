@@ -13,10 +13,10 @@ def make_argparser():
     subparsers = parser.add_subparsers(title='emulation type', description='valid emulation types', help='emulation type', dest='emu_method')
     
     parser_std = subparsers.add_parser('standard', help='run a standard DMD emulation on the data')
-    parser_std.add_argument('dataPath', help='path/to/data/file; CSV with columns of snapshots')
+    parser_std.add_argument('dataPath', help='path/to/data/file; CSV with rows of snapshots')
 
     parser_par = subparsers.add_parser('parametric', help='run a parametric DMD emulation on the data')
-    parser_par.add_argument('dataPath', help='path/to/data/list; text list of files, each CSV with columns of snapshots')
+    parser_par.add_argument('dataPath', help='path/to/data/list; text list of files, each CSV with rows of snapshots')
     parser_par.add_argument('--emuType', '-e', required=True, choices=['rKOI', 'rEPI'], help='Choice of parametric emulator type. Choices are reduced Koopman Interpolation (rKOI) and reduced Eigenpair Interpolation (rEPI).')
 
     for subparser in [parser_std, parser_par]:
