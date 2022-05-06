@@ -18,6 +18,13 @@ Call `python emulator.py -h` at anytime, and for any subcommand, for a descripti
 
     python emulator.py parametric /path/to/data/list --emuType rKOI  --nobs 20 --trunc 6 --t0 0.0 --t1 20.0 --dt 0.05
 
+*Note: right now, the parametric DMD is implemented for only a 1D trajectory in parametric space; e.g. varying pairing strength $g$ in the pairing model. Need further testing for exploring a parametric surface, manifold, etc.
+
+# Koopman operator theory
+
+The Koopman operator linearizes the dynamical system characeterized by the first-order ODE,
+
+$$\frac{d}{dt}\mathbf{x} = \mathbf{f}(\mathbf{x})$$
 
 # Dynamic Mode Decomposition (DMD)
 
