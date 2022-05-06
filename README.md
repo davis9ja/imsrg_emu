@@ -22,15 +22,54 @@ Call `python emulator.py -h` at anytime, and for any subcommand, for a descripti
 
 # Koopman operator theory
 
-The Koopman operator linearizes the dynamical system characeterized by the first-order ODE,
+The Koopman operator linearizes the dynamical system characeterized by a first-order ODE,
 
 ```math
-\frac{d}{dt}\mathbf{x} = \mathbf{f}(\mathbf{x})
+\frac{d}{dt}\mathbf{x}(t) = f(\mathbf{x}(t)).
 ```
+
+The discrete-time Koopman operator propagates a measurement function $`g`$, which evaluates the system $`x`$ at a step $`x_k`$, foward in time to a measurement of the next step $`x_{k+1}`$. Methodologically, we define the Koopman operator $`\mathcal{K}`$ such that
+
+```math
+\mathcal{K}g(x_k) = g(x_{k+1}),
+```
+
+where the dynamical step from $`k`$ to $`k+1`$ is governed by a flow map $`\mathbf{F}`$ such that $`x_{k+1} = \mathbf{F}(x_k)`$. Thus, the discrete-time Koopman operator is data-driven in that it's defined in a *measurement* basis that measures the flow map $\mathbf{F}$. The eigenfunctions of the Koopman operator completely characterize this flow map, such that
+
+```math
+\mathcal{K}\phi(x_k) = \lambda \phi(x_{k+1}).
+```
+
+The eigenfunctions of $`\mathcal{K}`$ quantifies the flow map, which in turns allows us to reproduce the dynamics the system by simply evaluating the eigenfunctions for every relevant timestep.
+
+Refer to Brunton et al. 2021 (arXiv:2102.12086v2) for more information.
 
 # Dynamic Mode Decomposition (DMD)
 
+The DMD is an algorithm for approximating the discrete-time Koopman operator. The DMD operator $`A`$ is defined as the best-fit operator which propagates a single snapshot of the evolving dynamical system forward in time, such that
+
+```math
+Ax_k = x_{k+1}.
+```
+
+In order to find this operator, we start by collecting *linear* measurements of the evolving dynamical system into a matrix of $`N`$ snapshot columns $`\mathbf{\Chi}`$. The DMD operator is constructed in this finite measurement basis via the offset matrices $`\mathbf{X}`$ and $`\mathbf{X}'`$, which contain columns $`1`$ through $`N-1`$ in $`\mathbf{\Chi}`$ and $`2`$ through $`N`$ in $`\mathbf{\Chi}`$, respectively, so that
+
+```math
+A\mathbf{X} = \mathbf{X}'.
+```
+The very simple solution to $`A`$ is just
+
+```math
+A = \mathbf{X}'\mathbf{X}^\dagger,
+```
+
+where $`^\dagger`$ is the Moore-Penrose pseudoinverse.
+
+Refer to Brunton et al. 2021 (arXiv:2102.12086v2) for more information.
+
 # Reduced Koopman Operator Interpolation (rKOI)
+
+
 
 # Reduced Eigenpair Interpolation (rEPI)
 
