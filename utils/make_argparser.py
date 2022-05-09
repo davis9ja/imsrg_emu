@@ -17,6 +17,8 @@ def make_argparser():
 
     parser_par = subparsers.add_parser('parametric', help='run a parametric DMD emulation on the data')
     parser_par.add_argument('dataPath', help='path/to/data/list; text list of files, each CSV with rows of snapshots')
+    parser_par.add_argument('paramList', help='path/to/param/file; CSV of param for each training sample in dataPath')
+    parser_par.add_argument('testParam', help='param set to test with parametric DMD (must fall within paramList range)')
     parser_par.add_argument('--emuType', '-e', required=True, choices=['rKOI', 'rEPI'], help='Choice of parametric emulator type. Choices are reduced Koopman Interpolation (rKOI) and reduced Eigenpair Interpolation (rEPI).')
 
     for subparser in [parser_std, parser_par]:

@@ -69,7 +69,7 @@ class DMD_rKOI(object):
     def b_p(self):
         return self._b_p
 
-    def fit(self, data_list, parameters, nobs_t, r):
+    def fit(self, data_list, parameters, nobs_t, r=6):
         """Fit the interpolators to build the parametric DMD system.
         
         Arguments:
@@ -119,9 +119,9 @@ class DMD_rKOI(object):
         self._b_training = np.asarray(b_training).T
 
 
-        self._AI = scipy.interpolate.interp1d(params, self.Ar_training, axis=-1)
-        self._UI = scipy.interpolate.interp1d(params, self.Ur_training, axis=-1)
-        self._bI = scipy.interpolate.interp1d(params, self.b_training, axis=-1)
+        self._AI = scipy.interpolate.interp1d(parameters, self.Ar_training, axis=-1)
+        self._UI = scipy.interpolate.interp1d(parameters, self.Ur_training, axis=-1)
+        self._bI = scipy.interpolate.interp1d(parameters, self.b_training, axis=-1)
 
 
     def interp_dmd(self, param_pred):
