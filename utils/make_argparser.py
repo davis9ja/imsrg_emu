@@ -19,6 +19,7 @@ def make_argparser():
     parser_par.add_argument('dataPath', help='path/to/data/list; text list of files, each CSV with rows of snapshots')
     parser_par.add_argument('paramList', help='path/to/param/file; CSV of param for each training sample in dataPath')
     parser_par.add_argument('testParam', help='param set to test with parametric DMD (must fall within paramList range)')
+    parser_par.add_argument('--testPath', '-tp', default=None, help='/path/to/test/data; CSV with rows of snapshots of data to test (mostly for plotting)')
     parser_par.add_argument('--emuType', '-e', required=True, choices=['rKOI', 'rEPI'], help='Choice of parametric emulator type. Choices are reduced Koopman Interpolation (rKOI) and reduced Eigenpair Interpolation (rEPI).')
 
     for subparser in [parser_std, parser_par]:
@@ -28,5 +29,6 @@ def make_argparser():
         subparser.add_argument('--t0', type=float, default=0.0, help='starting point for emulation')
         subparser.add_argument('--t1', type=float, default=10.0, help='ending point for emulation')
         subparser.add_argument('--dt', type=float, default=0.1, help='emulation step width')
+        subparser.add_argument('--plot', type=bool, default=False, help='make plots (default directory: ./plots/)')
 
     return vars(parser.parse_args())
