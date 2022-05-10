@@ -56,7 +56,9 @@ elif args['emu_method'] == 'parametric':
         dmd.fit(data_list, params, args['nobs'], r=args['trunc'])
         dmd.interp_dmd(args['testParam'])
 
-
+    print(params)
+    for data in data_list:
+        print('{:0.16f} {}'.format(data[0,0], data.shape))
 print("Printing results...")
 
 s_range = np.arange(args['t0'], args['t1']+args['dt'], args['dt'])

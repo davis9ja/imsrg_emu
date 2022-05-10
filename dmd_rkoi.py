@@ -92,8 +92,8 @@ class DMD_rKOI(object):
             Ur = U[:, :r]
             sr = sigma[:r]
             Vtr = Vt[:r, :]
-            
-            Ar = Ur.conj().T@Xp@Vtr.conj().T@la.inv(np.diag(sr))
+            print(sr)
+            Ar = Ur.conj().T@Xp@Vtr.conj().T@np.diag(np.reciprocal(sr))#la.inv(np.diag(sr))
             Ar_training.append(np.reshape(Ar,(-1,)))
             Ur_training.append(np.reshape(Ur,(-1,)))
 
@@ -133,7 +133,7 @@ class DMD_rKOI(object):
 
         Ar_pred = np.reshape(self.AI([param_pred]), self._Ar_shape)
 
-        w_pred, v_pred = np.linalg.eig(Ar_pred)
+        w_pred, v_pred = la.eig(Ar_pred)
         
         Ur_pred = np.reshape(self.UI([param_pred]), self._Ur_shape)
 
