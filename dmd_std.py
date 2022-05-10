@@ -11,7 +11,7 @@ import numpy as np
 from sklearn.utils.extmath import randomized_svd
 from sklearn.decomposition import TruncatedSVD
 
-from utils.get_log_data import get_log_data
+from imsrg_emu.utils.get_log_data import get_log_data
 
 class DMD_STD(object):
     """Standard implementation of the reduced DMD method. Brunton et al. 2021 (arXiv:2102.12086v2)

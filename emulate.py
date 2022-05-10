@@ -12,9 +12,9 @@ import numpy as np
 
 import dmd_rkoi as drk
 import dmd_std as dst
-from utils.get_log_data import get_log_data
-from utils.make_argparser import make_argparser
-from utils.make_plots import make_energy_plots, make_correlation_plots
+from imsrg_emu.utils.get_log_data import get_log_data
+from imsrg_emu.utils.make_argparser import make_argparser
+from imsrg_emu.utils.make_plots import make_energy_plots, make_correlation_plots
 
 args = make_argparser()
 

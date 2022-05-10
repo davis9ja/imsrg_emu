@@ -9,7 +9,7 @@
 import numpy as np
 import scipy.linalg as la
 import scipy.interpolate
-from utils.get_log_data import get_log_data
+from imsrg_emu.utils.get_log_data import get_log_data
 
 class DMD_rKOI(object):
     """
