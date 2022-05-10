@@ -22,6 +22,8 @@ print("Args from command line:")
 pprint.pprint(args)
 print()
 
+
+rank = args['trunc'] if args['tol'] == None else args['tol']
 dmd = None
 test_data = None
 
@@ -34,18 +36,21 @@ if args['emu_method'] == 'standard':
 
     print("Fitting standard DMD emulator")
     dmd = dst.DMD_STD()
-    dmd.fit(data_matrix, args['nobs'], r=args['trunc'], enforce_physics=True)
+    dmd.fit(data_matrix, args['nobs'], r=rank, enforce_physics=True)
 
 elif args['emu_method'] == 'parametric':
 
     data_list = []
     with open(args['dataPath'], 'r') as f:
         for line in f:
+            if list(line)[0] == "#":
+                continue
             data_matrix = np.loadtxt(line.replace("\n",""), delimiter=',', comments="#").T
             data_list.append(data_matrix)
 
-    with open(args['paramList'], 'r') as f:
-        params = np.asarray(f.readlines(), dtype=np.float64)
+    params = np.loadtxt(args['paramList'], delimiter=',', comments='#')
+    # with open(args['paramList'], 'r') as f:
+    #     params = np.asarray(f.readlines(), dtype=np.float64)
 
     if args['testPath'] is not None:
         test_data = np.loadtxt(args['testPath'], delimiter=',', comments='#').T
@@ -53,12 +58,9 @@ elif args['emu_method'] == 'parametric':
     if args['emuType'] == 'rKOI':
         print("Fitting rKOI DMD emulator")
         dmd = drk.DMD_rKOI()
-        dmd.fit(data_list, params, args['nobs'], r=args['trunc'])
+        dmd.fit(data_list, params, args['nobs'], r=rank)
         dmd.interp_dmd(args['testParam'])
 
-    print(params)
-    for data in data_list:
-        print('{:0.16f} {}'.format(data[0,0], data.shape))
 print("Printing results...")
 
 s_range = np.arange(args['t0'], args['t1']+args['dt'], args['dt'])

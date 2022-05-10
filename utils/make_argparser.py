@@ -26,6 +26,7 @@ def make_argparser():
         subparser.add_argument('-N', '--nobs', type=int, default=10, help='number of snapshots per DMD operator')
         subparser.add_argument('-E', '--exact', type=bool, default=False, help='True or False: compute DMD operator exactly instead of reduced')
         subparser.add_argument('-T', '--trunc', type=int, default=6, help='SVD truncation rank in reduced DMD')
+        subparser.add_argument('-t', '--tol', type=float, default=None, help='SVD singular value tolerance (if None, default to --trunc)')
         subparser.add_argument('--t0', type=float, default=0.0, help='starting point for emulation')
         subparser.add_argument('--t1', type=float, default=10.0, help='ending point for emulation')
         subparser.add_argument('--dt', type=float, default=0.1, help='emulation step width')

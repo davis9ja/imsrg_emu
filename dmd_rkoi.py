@@ -89,10 +89,19 @@ class DMD_rKOI(object):
             Xp = data[:, 1:nobs_t]
 
             U,sigma,Vt = la.svd(X, full_matrices=False)
-            Ur = U[:, :r]
-            sr = sigma[:r]
-            Vtr = Vt[:r, :]
-            print(sr)
+
+            if isinstance(r, int):
+                Ur = U[:, :r]
+                sr = sigma[:r]
+                Vtr = Vt[:r, :]
+            elif isinstance(r, float):
+                keep_idx = np.argwhere(sigma > r)[:,0]
+                print(keep_idx.shape, keep_idx)
+
+                Ur = U[:, keep_idx]
+                sr = sigma[keep_idx]
+                Vtr = Vt[keep_idx, :]
+            print(Ur.shape, sr.shape, Vtr.shape)
             Ar = Ur.conj().T@Xp@Vtr.conj().T@np.diag(np.reciprocal(sr))#la.inv(np.diag(sr))
             Ar_training.append(np.reshape(Ar,(-1,)))
             Ur_training.append(np.reshape(Ur,(-1,)))
@@ -165,8 +174,6 @@ class DMD_rKOI(object):
         self._Phi_p = phi_pred
         self._eigs_p = w_pred
         self._b_p = b_pred
-        
-        print(w_pred, b_pred)
 
     def predict(self, s_range, ds):
         """Emulate the dynamical system over the specified range, for the specified parametric realization (in interp_dmd).
