@@ -102,7 +102,7 @@ class DMD_rKOI(object):
 
             # compute phi (or, try the other way in the Data Driven Science book)
             # which is to evaluate in column space of Xp
-            phi = Ur@np.diag(w)
+            phi = Ur@v
             # phi = Xp@Vtr.conj().T@la.inv(np.diag(sr))@v*np.reciprocal(w)
 
             # compute mode amplitudes
@@ -117,7 +117,6 @@ class DMD_rKOI(object):
         self._Ar_training = np.asarray(Ar_training).T
         self._Ur_training = np.asarray(Ur_training).T
         self._b_training = np.asarray(b_training).T
-
 
         self._AI = scipy.interpolate.interp1d(parameters, self.Ar_training, axis=-1)
         self._UI = scipy.interpolate.interp1d(parameters, self.Ur_training, axis=-1)
@@ -140,7 +139,7 @@ class DMD_rKOI(object):
 
         b_pred = self.bI([param_pred])[:,0]
 
-        phi_pred = Ur_pred@np.diag(w_pred)
+        phi_pred = Ur_pred@v_pred
         # w_pred[0] = 1
 
         # -- enforce physical constraints
@@ -167,6 +166,7 @@ class DMD_rKOI(object):
         self._eigs_p = w_pred
         self._b_p = b_pred
         
+        print(w_pred, b_pred)
 
     def predict(self, s_range, ds):
         """Emulate the dynamical system over the specified range, for the specified parametric realization (in interp_dmd).
