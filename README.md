@@ -104,22 +104,22 @@ Refer to Brunton et al. 2021 (arXiv:2102.12086v2) for more information.
 
 rKOI algorithm as presented in Huhn et al. 2022:
 
-1  Collect $`N`$ data matrices, $\chi_1,\dots,\chi_N$ for corresponding parametric realizations $`\mu_1,\dots,\mu_N`$.
-2. Compute singular vector matrices $`U_1,\dots,U_N`$.
+1. Collect $`N`$ data matrices, $`\chi_1,\dots,\chi_N`$ for corresponding parametric realizations $`\mu_1,\dots,\mu_N`$.
+2. Compute singular vector matrices $`U_1,\dots,U_N`$.       
 3. Compute DMD operators $`A_1,\dots,A_N`$ and mode amplitudes $`b_1,\dots,b_N`$.
 4. For test parametric realization $`\mu_\theta`$:
    1. Interpolate $`U_\theta`$ on $`U_1, \dots, U_N`$
    2. Interpolate $`A_\theta`$ on $`A_1, \dots, A_N`$   
    3. Interpolate $`b_\theta`$ on $`b_1, \dots, b_N`$
    4. Compute eigendecomp $`A_\theta W_\theta = W_\theta \Lambda_\theta`$
-   5. Compute DMD modes $`\Phi_\theta` = U_\theta W_\theta`$
+   5. Compute DMD modes $`\Phi_\theta = U_\theta W_\theta`$
    6. Compute DMD expansion for $`\mu_\theta`$ system
 
 Refer to Huhn et al. 2022 (arXiv:2204.12006v1) for more information.
 
 # Reduced Eigenpair Interpolation (rEPI)
 
-1  Collect $`N`$ data matrices, $\chi_1,\dots,\chi_N$ for corresponding parametric realizations $`\mu_1,\dots,\mu_N`$.
+1. Collect $`N`$ data matrices, $`\chi_1,\dots,\chi_N`$ for corresponding parametric realizations $`\mu_1,\dots,\mu_N`$.
 2. Compute singular vector matrices $`U_1,\dots,U_N`$.
 3. Compute DMD operator eigendecomps $`W_1,\dots,W_N`$ and $`\Lambda_1,\dots,\Lambda_N`$, and mode amplitudes $`b_1,\dots,b_N`$.
 4. For test parametric realization $`\mu_\theta`$:
@@ -128,7 +128,7 @@ Refer to Huhn et al. 2022 (arXiv:2204.12006v1) for more information.
    3. Interpolate $`\Lambda_\theta`$ on $`\Lambda_1, \dots, \Lambda_N`$   
    4. Interpolate $`b_\theta`$ on $`b_1, \dots, b_N`$
    5. Compute eigendecomp $`A_\theta W_\theta = W_\theta \Lambda_\theta`$
-   6. Compute DMD modes $`\Phi_\theta` = U_\theta W_\theta`$
+   6. Compute DMD modes $`\Phi_\theta = U_\theta W_\theta`$
    7. Compute DMD expansion for $`\mu_\theta`$ system
 
 # Sparse Identification of Nonlinear Dynamics (SINDy)
