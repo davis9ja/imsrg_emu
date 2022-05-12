@@ -31,7 +31,7 @@ Call `python emulator.py -h` at anytime, and for any subcommand, for a descripti
 
 ### Example: parametric DMD
 
-    python emulator.py parametric /path/to/data/list --emuType rKOI  --nobs 20 --trunc 6 --t0 0.0 --t1 20.0 --dt 0.05
+    python emulator.py parametric path/to/data/list path/to/param/list <testParm> --emuType rKOI  --nobs 20 --trunc 6 --t0 0.0 --t1 20.0 --dt 0.05
 
 # How to import to your own code
 
