@@ -1,5 +1,16 @@
 Repository for IMSRG Emulator Research.
 
+# TODO:
+
+- [ ] Add SINDy module
+- [ ] Add more plotting routines
+  - [ ] Come up with experiment for parametric error surface?
+  - [ ] Add singular value distribution plot?
+- [ ] Implement rEPI module in `emulate.py` interactive module
+- [ ] Extend parametric emulator to 2D parametric problem
+- [ ] Push example of input argument piping
+- [ ] Implement routine for storing emulated system steps on file
+
 # Purpose
 
 The purpose here is to streamline experimentation of data-driven emulator techniques for the IMSRG (and, in principle, any other dynamical system). The project rationale is this: data-driven emulator techniques begin in the same way, which is to collect a number of snapshots of the evolving system, and then perform some sort of optimization on an operator that drives the system. In this way, we want to design a general interface where the user can pick the emulation technique they want, pointing to the location of the data, and run the emulator interactively with relevant parameters. We also want to include some routines for analyzing the emulation efficacy.
@@ -91,8 +102,33 @@ Refer to Brunton et al. 2021 (arXiv:2102.12086v2) for more information.
 
 # Reduced Koopman Operator Interpolation (rKOI)
 
+rKOI algorithm as presented in Huhn et al. 2022:
 
+1  Collect $`N`$ data matrices, $\chi_1,\dots,\chi_N$ for corresponding parametric realizations $`\mu_1,\dots,\mu_N`$.
+2. Compute singular vector matrices $`U_1,\dots,U_N`$.
+3. Compute DMD operators $`A_1,\dots,A_N`$ and mode amplitudes $`b_1,\dots,b_N`$.
+4. For test parametric realization $`\mu_\theta`$:
+   1. Interpolate $`U_\theta`$ on $`U_1, \dots, U_N`$
+   2. Interpolate $`A_\theta`$ on $`A_1, \dots, A_N`$   
+   3. Interpolate $`b_\theta`$ on $`b_1, \dots, b_N`$
+   4. Compute eigendecomp $`A_\theta W_\theta = W_\theta \Lambda_\theta`$
+   5. Compute DMD modes $`\Phi_\theta` = U_\theta W_\theta`$
+   6. Compute DMD expansion for $`\mu_\theta`$ system
+
+Refer to Huhn et al. 2022 (arXiv:2204.12006v1) for more information.
 
 # Reduced Eigenpair Interpolation (rEPI)
+
+1  Collect $`N`$ data matrices, $\chi_1,\dots,\chi_N$ for corresponding parametric realizations $`\mu_1,\dots,\mu_N`$.
+2. Compute singular vector matrices $`U_1,\dots,U_N`$.
+3. Compute DMD operator eigendecomps $`W_1,\dots,W_N`$ and $`\Lambda_1,\dots,\Lambda_N`$, and mode amplitudes $`b_1,\dots,b_N`$.
+4. For test parametric realization $`\mu_\theta`$:
+   1. Interpolate $`U_\theta`$ on $`U_1, \dots, U_N`$
+   2. Interpolate $`W_\theta`$ on $`W_1, \dots, W_N`$   
+   3. Interpolate $`\Lambda_\theta`$ on $`\Lambda_1, \dots, \Lambda_N`$   
+   4. Interpolate $`b_\theta`$ on $`b_1, \dots, b_N`$
+   5. Compute eigendecomp $`A_\theta W_\theta = W_\theta \Lambda_\theta`$
+   6. Compute DMD modes $`\Phi_\theta` = U_\theta W_\theta`$
+   7. Compute DMD expansion for $`\mu_\theta`$ system
 
 # Sparse Identification of Nonlinear Dynamics (SINDy)
