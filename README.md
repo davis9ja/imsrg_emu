@@ -6,7 +6,7 @@ Repository for IMSRG Emulator Research.
 - [ ] Add more plotting routines
   - [ ] Come up with experiment for parametric error surface?
   - [ ] Add singular value distribution plot?
-- [ ] Implement rEPI module in `emulate.py` interactive module
+- [x] Implement rEPI module in `emulate.py` interactive module
 - [ ] Extend parametric emulator to 2D parametric problem
 - [ ] Push example of input argument piping
 - [ ] Implement routine for storing emulated system steps on file
