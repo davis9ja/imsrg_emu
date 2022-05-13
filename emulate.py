@@ -12,9 +12,11 @@ import numpy as np
 
 import dmd_rkoi as drk
 import dmd_std as dst
+import dmd_repi as dre
 from imsrg_emu.utils.get_log_data import get_log_data
 from imsrg_emu.utils.make_argparser import make_argparser
 from imsrg_emu.utils.make_plots import make_energy_plots, make_correlation_plots
+import imsrg_emu.utils.make_plots as mp
 
 args = make_argparser()
 
@@ -28,6 +30,7 @@ dmd = None
 test_data = None
 
 if args['emu_method'] == 'standard':
+    mp.plot_dir = "std_plots/"
 
     print("Reading single flow data from ", args['dataPath'])
     #data_matrix = get_log_data(args['dataPath'])
@@ -56,10 +59,21 @@ elif args['emu_method'] == 'parametric':
         test_data = np.loadtxt(args['testPath'], delimiter=',', comments='#').T
 
     if args['emuType'] == 'rKOI':
+        mp.plot_dir = "par_rkoi_plots/"
+
         print("Fitting rKOI DMD emulator")
         dmd = drk.DMD_rKOI()
         dmd.fit(data_list, params, args['nobs'], r=rank)
         dmd.interp_dmd(args['testParam'])
+
+    if args['emuType'] == 'rEPI':
+        mp.plot_dir = "par_repi_plots/"
+
+        print("Fitting rEPI DMD emulator")
+        dmd = dre.DMD_rEPI()
+        dmd.fit(data_list, params, args['nobs'], r=rank)
+        dmd.interp_dmd(args['testParam'])
+
 
 print("Printing results...")
 
