@@ -57,9 +57,13 @@ Export `imsrg_emu/` to your $PYTHONPATH
 
 The Koopman operator linearizes the dynamical system characeterized by a first-order ODE,
 
+<!---
 ```math
 \frac{d}{dt}\mathbf{x}(t) = f(\mathbf{x}(t)).
 ```
+-->
+
+$$\frac{d}{dt}\mathbf{x}(t) = f(\mathbf{x}(t)).$$
 
 The discrete-time Koopman operator propagates a measurement function $`g`$, which evaluates the system $`x`$ at a step $`x_k`$, foward in time to a measurement of the next step $`x_{k+1}`$. Methodologically, we define the Koopman operator $`\mathcal{K}`$ such that
 
