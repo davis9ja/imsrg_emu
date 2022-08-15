@@ -21,17 +21,17 @@ Refer to `davis9ja.github.io/imsrg_emu/`.
 
 # How to run
 
-Running an emulator is simple. Call the "executable" (as much as we can define an executable in Python), `emulator.py`, with a subcommand to determine the emulator technique to run, and a positional argument that points to the data path (depedent on emulator technique).
+Running an emulator is simple. Call the "executable" (as much as we can define an executable in Python), `emulate.py`, with a subcommand to determine the emulator technique to run, and a positional argument that points to the data path (depedent on emulator technique).
 
-Call `python emulator.py -h` at anytime, and for any subcommand, for a description of all possible positional arguments and optional keyword arguments.
+Call `python emulate.py -h` at anytime, and for any subcommand, for a description of all possible positional arguments and optional keyword arguments.
 
 ### Example: standard DMD
 
-    python emulator.py standard path/to/csv/data/file  --nobs 20 --trunc 6 --t0 0.0 --t1 20.0 --dt 0.05
+    python emulate.py standard path/to/csv/data/file  --nobs 20 --trunc 6 --t0 0.0 --t1 20.0 --dt 0.05
 
 ### Example: parametric DMD
 
-    python emulator.py parametric path/to/data/list path/to/param/list <testParm> --emuType rKOI  --nobs 20 --trunc 6 --t0 0.0 --t1 20.0 --dt 0.05
+    python emulate.py parametric path/to/data/list path/to/param/list <testParm> --emuType rKOI  --nobs 20 --trunc 6 --t0 0.0 --t1 20.0 --dt 0.05
 
 # How to import to your own code
 
@@ -122,9 +122,9 @@ Refer to Huhn et al. 2022 (arXiv:2204.12006v1) for more information.
 1. Collect $`N`$ data matrices, $`\chi_1,\dots,\chi_N`$ for corresponding parametric realizations $`\mu_1,\dots,\mu_N`$.
 2. Compute singular vector matrices $`U_1,\dots,U_N`$.
 3. Compute DMD operator eigendecomps $`W_1,\dots,W_N`$ and $`\Lambda_1,\dots,\Lambda_N`$, and mode amplitudes $`b_1,\dots,b_N`$.
-4. For test parametric realization $`\mu_\theta`$:
+4. For test parametric realization $`\mu_\theta`$
    1. Interpolate $`U_\theta`$ on $`U_1, \dots, U_N`$
-   2. Interpolate $`W_\theta`$ on $`W_1, \dots, W_N`$   
+   2. Interpolate $`W_\theta`$ on $`W_1, \dots, W_N`$
    3. Interpolate $`\Lambda_\theta`$ on $`\Lambda_1, \dots, \Lambda_N`$   
    4. Interpolate $`b_\theta`$ on $`b_1, \dots, b_N`$
    5. Compute eigendecomp $`A_\theta W_\theta = W_\theta \Lambda_\theta`$
