@@ -95,12 +95,24 @@ class DMD_STD(object):
         b = la.lstsq(phi, H0, lapack_driver='gelsd')[0]
 
         if enforce_physics:
-            idx_max = np.argmax(w)
-            w[idx_max] = 1
-            
-            # drop imaginary comps
-            w = np.real(w) 
-        
+            # real eigs
+            w = np.real(w)
+
+            # positive eigs     
+            idx = np.argwhere(w > 0)[:,0]
+            w = w[idx]
+            phi = phi[:,idx]
+            b = b[idx]
+
+            # set "background"
+            sorted_idx = np.argsort(w)[::-1]
+            w = w[sorted_idx]
+            phi = phi[:,sorted_idx]
+            b = b[sorted_idx]
+
+            if w[0] > 1:
+                w[0] = 1
+
         # Set class attributes
         self._phi = phi
         self._eigs = w
