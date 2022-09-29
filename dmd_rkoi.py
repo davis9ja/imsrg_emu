@@ -69,7 +69,7 @@ class DMD_rKOI(object):
     def b_p(self):
         return self._b_p
 
-    def fit(self, data_list, parameters, nobs_t, r=6):
+    def fit(self, data_list, parameters, nobs_t, r=6, kind="linear"):
         """Fit the interpolators to build the parametric DMD system.
         
         Arguments:
@@ -96,12 +96,12 @@ class DMD_rKOI(object):
                 Vtr = Vt[:r, :]
             elif isinstance(r, float):
                 keep_idx = np.argwhere(sigma > r)[:,0]
-                print(keep_idx.shape, keep_idx)
+                #print(keep_idx.shape, keep_idx)
 
                 Ur = U[:, keep_idx]
                 sr = sigma[keep_idx]
                 Vtr = Vt[keep_idx, :]
-            print(Ur.shape, sr.shape, Vtr.shape)
+            #print(Ur.shape, sr.shape, Vtr.shape)
             Ar = Ur.conj().T@Xp@Vtr.conj().T@np.diag(np.reciprocal(sr))#la.inv(np.diag(sr))
             Ar_training.append(np.reshape(Ar,(-1,)))
             Ur_training.append(np.reshape(Ur,(-1,)))
@@ -115,7 +115,15 @@ class DMD_rKOI(object):
             # phi = Xp@Vtr.conj().T@la.inv(np.diag(sr))@v*np.reciprocal(w)
 
             # compute mode amplitudes
-            b = la.lstsq(phi, X[:,0], lapack_driver='gelsd')[0]
+            
+            # Strategy 1: Solve least squares problem of Phi*b = X[:,0]
+            #b = la.lstsq(phi, X[:,0], lapack_driver='gelsd')[0]
+
+            # Strategy 2: Compute in the projected data
+            b = la.inv(v@np.diag(w))@Ur.conj().T@X[:,0]
+
+            # Strategy 3: Directly compute with pseudoinverse
+            #b = la.pinv(phi)@X[:,0]
 
             b_training.append(b)
 
@@ -127,9 +135,9 @@ class DMD_rKOI(object):
         self._Ur_training = np.asarray(Ur_training).T
         self._b_training = np.asarray(b_training).T
 
-        self._AI = scipy.interpolate.interp1d(parameters, self.Ar_training, axis=-1)
-        self._UI = scipy.interpolate.interp1d(parameters, self.Ur_training, axis=-1)
-        self._bI = scipy.interpolate.interp1d(parameters, self.b_training, axis=-1)
+        self._AI = scipy.interpolate.interp1d(parameters, self.Ar_training, axis=-1, kind=kind)
+        self._UI = scipy.interpolate.interp1d(parameters, self.Ur_training, axis=-1, kind=kind)
+        self._bI = scipy.interpolate.interp1d(parameters, self.b_training,  axis=-1, kind=kind)
 
 
     def interp_dmd(self, param_pred):
@@ -171,9 +179,9 @@ class DMD_rKOI(object):
         if w_pred[0] > 1:
             w_pred[0] = 1
 
-        self._Phi_p = phi_pred
-        self._eigs_p = w_pred
-        self._b_p = b_pred
+        self._Phi_p = np.copy(phi_pred)
+        self._eigs_p = np.copy(w_pred)
+        self._b_p = np.copy(b_pred)
 
     def predict(self, s_range, ds):
         """Emulate the dynamical system over the specified range, for the specified parametric realization (in interp_dmd).
