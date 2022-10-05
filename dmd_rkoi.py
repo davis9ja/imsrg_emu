@@ -22,6 +22,9 @@ class DMD_rKOI(object):
         self._Ur_training = None
         self._b_training = None
 
+        # for sign convention; all other phi will be signed relative to this phi
+        self._relative_Phi = None
+
         self._AI = None
         self._UI = None
         self._bI = None
@@ -84,7 +87,9 @@ class DMD_rKOI(object):
         Ur_training = []
         b_training = []
 
-        for data in data_list:
+        base_phi = np.eye(r)
+        base_v = np.eye(r)
+        for i,data in enumerate(data_list):
             X = data[:, :nobs_t-1]
             Xp = data[:, 1:nobs_t]
 
@@ -96,15 +101,12 @@ class DMD_rKOI(object):
                 Vtr = Vt[:r, :]
             elif isinstance(r, float):
                 keep_idx = np.argwhere(sigma > r)[:,0]
-                #print(keep_idx.shape, keep_idx)
 
                 Ur = U[:, keep_idx]
                 sr = sigma[keep_idx]
                 Vtr = Vt[keep_idx, :]
-            #print(Ur.shape, sr.shape, Vtr.shape)
+
             Ar = Ur.conj().T@Xp@Vtr.conj().T@np.diag(np.reciprocal(sr))#la.inv(np.diag(sr))
-            Ar_training.append(np.reshape(Ar,(-1,)))
-            Ur_training.append(np.reshape(Ur,(-1,)))
 
             # eigendecomp
             w,v =la.eig(Ar)
@@ -113,19 +115,54 @@ class DMD_rKOI(object):
             # which is to evaluate in column space of Xp
             phi = Ur@v
             # phi = Xp@Vtr.conj().T@la.inv(np.diag(sr))@v*np.reciprocal(w)
+            
+            #ENFORCE SIGN CONVENTION IN EIGENVECTORS
+            if i == 0:
+                self._relative_Phi = phi
+            else:
+                # check the sign compared to relative Phi
+                overlaps = phi.conj().T@self._relative_Phi
+                overlaps = np.diag(np.sign(np.diag(overlaps)))
+
+                phi = phi@overlaps
+
+
+
 
             # compute mode amplitudes
-            
+            ################################
             # Strategy 1: Solve least squares problem of Phi*b = X[:,0]
-            #b = la.lstsq(phi, X[:,0], lapack_driver='gelsd')[0]
+            b = la.lstsq(phi, X[:,0], lapack_driver='gelsd')[0]
 
             # Strategy 2: Compute in the projected data
-            b = la.inv(v@np.diag(w))@Ur.conj().T@X[:,0]
+            #b = la.inv(v@np.diag(w))@Ur.conj().T@X[:,0]
 
             # Strategy 3: Directly compute with pseudoinverse
             #b = la.pinv(phi)@X[:,0]
 
+
+            # -- enforce physical constraints
+            # real eigs
+            w = np.real(w)
+
+            # positive eigs     
+            idx = np.argwhere(w > 0)[:,0]
+            w = w[idx]
+            phi = phi[:,idx]
+            b = b[idx]
+
+            # set "background"
+            sorted_idx = np.argsort(w)[::-1]
+            w = w[sorted_idx]
+            phi = phi[:,sorted_idx]
+            b = b[sorted_idx]
+            
+            if w[0] > 1:
+                w[0] = 1
+
             b_training.append(b)
+            Ur_training.append(np.reshape(Ur,(-1,)))
+            Ar_training.append(np.reshape(Ar,(-1,)))
 
 
             self._Ar_shape = Ar.shape
@@ -157,6 +194,13 @@ class DMD_rKOI(object):
         b_pred = self.bI([param_pred])[:,0]
 
         phi_pred = Ur_pred@v_pred
+
+        # enfore sign convention
+        overlaps = phi_pred.conj().T@self._relative_Phi
+        overlaps = np.diag(np.sign(np.diag(overlaps)))
+        phi_pred = phi_pred@overlaps
+
+        
         # w_pred[0] = 1
 
         # -- enforce physical constraints
@@ -172,12 +216,13 @@ class DMD_rKOI(object):
 
         # set "background"
         sorted_idx = np.argsort(w_pred)[::-1]
+
         w_pred = w_pred[sorted_idx]
         phi_pred = phi_pred[:,sorted_idx]
-        b_pred = b_pred[sorted_idx]
+        #b_pred = b_pred[sorted_idx] # do not sort the amplitudes because their order is interpolated
 
         if w_pred[0] > 1:
-            w_pred[0] = 1
+            w_pred[0] = 1            
 
         self._Phi_p = np.copy(phi_pred)
         self._eigs_p = np.copy(w_pred)
